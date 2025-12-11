@@ -1,0 +1,5 @@
+uv init
+
+uv add fastapi sqlmodel uvicorn alembic
+
+uv run uvicorn main:app --reload

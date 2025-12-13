@@ -9,6 +9,10 @@ uv add python-dotenv
 uv add pydantic-settings
 
 uv run alembic revision --autogenerate -m "init"
+(adicionar "import sqlmdel" ) alembic > version > migration
+
 uv run alembic upgrade head
+
+uv run python -m app.seeds.seed_data
 
 uv run uvicorn main:app --reload

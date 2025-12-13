@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 1b5fba16d6eb
+Revision ID: 906cce43ec9c
 Revises: 
-Create Date: 2025-12-12 11:52:17.034139
+Create Date: 2025-12-13 14:54:32.017654
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '1b5fba16d6eb'
+revision: str = '906cce43ec9c'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -68,12 +68,13 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('collectioncarlink',
-    sa.Column('collection_item_id', sa.Integer(), nullable=False),
-    sa.Column('car_id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('collection_item_id', sa.Integer(), nullable=True),
+    sa.Column('car_id', sa.Integer(), nullable=True),
     sa.Column('added_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['car_id'], ['car.id'], ),
     sa.ForeignKeyConstraint(['collection_item_id'], ['collection.id'], ),
-    sa.PrimaryKeyConstraint('collection_item_id', 'car_id')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

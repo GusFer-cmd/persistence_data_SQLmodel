@@ -52,8 +52,10 @@ class Collection(SQLModel, table=True):
     cars: List["CollectionCarLink"] = Relationship(back_populates="collection")
 
 class CollectionCarLink(SQLModel, table=True):
-    collection_item_id: Optional[int] = Field(default=None, foreign_key="collection.id", primary_key=True)
-    car_id: Optional[int] = Field(default=None, foreign_key="car.id", primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+    collection_item_id: Optional[int] = Field(default=None, foreign_key="collection.id")
+    car_id: Optional[int] = Field(default=None, foreign_key="car.id")
     added_date: datetime = Field(default_factory=datetime.now)
 
     collection: Optional[Collection] = Relationship(back_populates="cars")

@@ -25,7 +25,7 @@ def list_manufecturer(manufacturer_id: int, session: Session = Depends(get_sessi
         raise HTTPException(status_code=404, detail="Manufacturer not found")
     return manufacturer
     
-@router.delete("/manufacturer/{manufacturer_id}", response_model=Manufacturer)
+@router.delete("/{manufacturer_id}", response_model=Manufacturer)
 def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_session)):
     manufacturer = session.get(Manufacturer, manufacturer_id)
     if not manufacturer:

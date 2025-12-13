@@ -2,4 +2,13 @@ uv init
 
 uv add fastapi sqlmodel uvicorn alembic
 
+uv run alembic init alembic
+
+uv add python-dotenv
+
+uv add pydantic-settings
+
+uv run alembic revision --autogenerate -m "init"
+uv run alembic upgrade head
+
 uv run uvicorn main:app --reload

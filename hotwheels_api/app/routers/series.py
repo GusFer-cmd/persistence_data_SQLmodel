@@ -33,3 +33,11 @@ def delete_serie(serie_id: int, session: Session = Depends(get_session)):
     session.delete(serie)
     session.commit()
     return serie
+
+@router.get("/year/{serie_year}", response_model=list[Serie])
+def list_serie_year(serie_year: int, session: Session = Depends(get_session)):
+    query = select(Serie).where(Serie.year == serie_year)
+    serie = session.exec(query)
+    if not serie:
+        raise HTTPException(status_code=404, detail="Serie not found")
+    return serie

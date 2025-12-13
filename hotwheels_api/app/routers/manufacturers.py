@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, select, func
 from app.core.database import get_session
-from app.models.models import Manufacturer
+from app.models.models import Manufacturer, Car
 
 router = APIRouter(prefix="/manufactures", tags=["Manufactures"])
 
@@ -33,3 +33,13 @@ def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_ses
     session.delete(manufacturer)
     session.commit()
     return manufacturer
+
+@router.get("/quantity/{numb}", response_model=list[Manufacturer])
+def list_manufectures_number(numb: int, session: Session = Depends(get_session)):
+    query = (select(Manufacturer)
+                .join(Car, Car.manufacturer_id == Manufacturer.id)
+                .group_by(Manufacturer.id)
+                .having(func.count(Car.manufacturer_id) >= numb)
+                .distinct())
+    manufectures = session.exec(query)
+    return manufectures

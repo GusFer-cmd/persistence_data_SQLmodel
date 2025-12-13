@@ -16,3 +16,8 @@ uv run alembic upgrade head
 uv run python -m app.seeds.seed_data
 
 uv run uvicorn main:app --reload
+
+PARA O SUPABASE NÃO USAR UV (tenho que ver qual o problema):
+python3 -m app.seeds.seed_data
+
+uvicorn main:app --reload

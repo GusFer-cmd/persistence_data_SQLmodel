@@ -8,11 +8,30 @@ router = APIRouter(prefix="/series", tags=["Series"])
 #series
 @router.get("/", response_model=list[Serie])
 def list_series(session: Session = Depends(get_session)):
+    """
+    Docstring para list_series
+    
+    Args:
+        session (Session): sessao do banco de dados
+
+    Returns:
+        series (List[Series]): lista de series
+    """
     series = session.exec(select(Serie)).all()
     return series
     
 @router.post("/", response_model=Serie)
 def create_serie(serie: Serie, session: Session = Depends(get_session)):
+    """
+    Docstring para create_serie
+    
+    Args:
+        serie (Serie): objeto serie a ser inserido na tabela
+        session (Session): sessao do banco
+
+    Returns:
+        serie (Serie): serie inserida no banco
+    """
     session.add(serie)
     session.commit()
     session.refresh(serie)
@@ -20,6 +39,16 @@ def create_serie(serie: Serie, session: Session = Depends(get_session)):
 
 @router.get("/{serie_id}", response_model=Serie)
 def list_serie(serie_id: int, session: Session = Depends(get_session)):
+    """
+    Docstring para list_serie
+    
+    Args:
+        serie_id (int): id da serie
+        session (Session): sessao do banco
+
+    Returns:
+        serie (Serie): objeto serie com  o id fornecido
+    """
     serie = session.get(Serie, serie_id)
     if not serie:
         raise HTTPException(status_code=404, detail="Serie not found")
@@ -27,6 +56,16 @@ def list_serie(serie_id: int, session: Session = Depends(get_session)):
     
 @router.delete("/{serie_id}", response_model=Serie)
 def delete_serie(serie_id: int, session: Session = Depends(get_session)):
+    """
+    Docstring para delete_serie
+    
+    Args:
+        serie_id (int): id da serie a ser deletada na tabela
+        session (Session): sessao do banco
+
+    Returns:
+        serie (Serie): serie removida do banco
+    """
     serie = session.get(Serie, serie_id)
     if not serie:
         raise HTTPException(status_code=404, detail="Serie not found")
@@ -36,8 +75,18 @@ def delete_serie(serie_id: int, session: Session = Depends(get_session)):
 
 @router.get("/year/{serie_year}", response_model=list[Serie])
 def list_serie_year(serie_year: int, session: Session = Depends(get_session)):
+    """
+    Docstring para list_serie_year
+    
+    Args:
+    serie_year (int): ano da serie
+    session (Session): sessao do banco
+
+    Returns:
+        series (List[Series]): lista com as series do ano fornecido
+    """
     query = select(Serie).where(Serie.year == serie_year)
-    serie = session.exec(query)
-    if not serie:
+    series = session.exec(query)
+    if not series:
         raise HTTPException(status_code=404, detail="Serie not found")
-    return serie
+    return series

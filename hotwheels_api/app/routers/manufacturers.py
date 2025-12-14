@@ -7,19 +7,48 @@ router = APIRouter(prefix="/manufactures", tags=["Manufactures"])
 
 #manufacturer
 @router.get("/", response_model=list[Manufacturer])
-def list_manufectures(session: Session = Depends(get_session)):
-    manufectures = session.exec(select(Manufacturer)).all()
-    return manufectures
+def list_manufactures(session: Session = Depends(get_session)):
+    """
+    Docstring para list_manufactures
+    
+    Args:
+        session (Session): sessao do banco de dados
+    
+    Returns:
+        manufactures (List[Manufacturer]): lista de todas as montadoras
+    """
+    manufactures = session.exec(select(Manufacturer)).all()
+    return manufactures
     
 @router.post("/", response_model=Manufacturer)
 def create_manufacturer(manufacturer: Manufacturer, session: Session = Depends(get_session)):
+    """
+    Docstring para create_manufacturer
+    
+    Args:
+        manufacturer (Manufacturer): objeto Manufacturer a ser inserido no banco
+        session (Session): sessao do banco de dados
+    
+    Returns:
+        manufacturer (Manufacturer): objeto Manufacturer que foi inserido no banco
+    """
     session.add(manufacturer)
     session.commit()
     session.refresh(manufacturer)
     return manufacturer
 
 @router.get("/{manufacturer_id}", response_model=Manufacturer)
-def list_manufecturer(manufacturer_id: int, session: Session = Depends(get_session)):
+def get_manufacturer(manufacturer_id: int, session: Session = Depends(get_session)):
+    """
+    Docstring para get_manufacturer
+    
+    Args:
+        manufacturer_id (int): id da montadora
+        session (Session): sessao do banco
+
+    Returns:
+        manufacturer (Manufacturer): montadora com o id fornecido
+    """
     manufacturer = session.get(Manufacturer, manufacturer_id)
     if not manufacturer:
         raise HTTPException(status_code=404, detail="Manufacturer not found")
@@ -27,6 +56,16 @@ def list_manufecturer(manufacturer_id: int, session: Session = Depends(get_sessi
     
 @router.delete("/{manufacturer_id}", response_model=Manufacturer)
 def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_session)):
+    """
+    Docstring para delete_manufacturer
+    
+    Args:
+        manufacturer_id (int): id do objeto Manufacturer a ser removido
+        session (Session): sessao do banco de dados
+    
+    Returns:
+        manufacturer (Manufacturer): objeto Manufacturer que foi deletado do banco
+    """
     manufacturer = session.get(Manufacturer, manufacturer_id)
     if not manufacturer:
         raise HTTPException(status_code=404, detail="Manufacturer not found")
@@ -35,11 +74,19 @@ def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_ses
     return manufacturer
 
 @router.get("/quantity/{numb}", response_model=list[Manufacturer])
-def list_manufectures_number(numb: int, session: Session = Depends(get_session)):
+def list_manufactures_number(numb: int, session: Session = Depends(get_session)):
+    """
+    Docstring para list_manufactures_number
+    
+    numb (int): numero minimo de carros
+    session (Session): sessao do banco de dados
+
+    manufactures (List[Manufacturer]): lista com as montadoras com mais que numb carros
+    """
     query = (select(Manufacturer)
                 .join(Car, Car.manufacturer_id == Manufacturer.id)
                 .group_by(Manufacturer.id)
                 .having(func.count(Car.manufacturer_id) >= numb)
                 .distinct())
-    manufectures = session.exec(query)
-    return manufectures
+    manufactures = session.exec(query)
+    return manufactures

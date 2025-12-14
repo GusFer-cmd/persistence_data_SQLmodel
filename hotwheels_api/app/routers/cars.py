@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 from app.core.database import get_session
 from app.models.models import Car, Manufacturer, CarSerieLink, Serie
@@ -18,6 +18,23 @@ def list_cars(session: Session = Depends(get_session)):
         List[Car]: lista com todos os carros 
     """
     cars = session.exec(select(Car)).all()
+    return cars
+
+
+@router.get("/paged", response_model=list[Car])
+def list_cars_paged(offset: int = 0, limit: int = Query(default=10, le=100), session: Session = Depends(get_session)):
+    """
+    Docstring para list_cars_paged
+    
+    Args:
+        offset (int): deslocamento inicial
+        limit (int): limite de registros a serem retornados
+        session (Session): sessão do banco de dados
+
+    Returns:
+        List[Car]: lista com os carros dentro do intervalo fornecido
+    """
+    cars = session.exec(select(Car).offset(offset).limit(limit)).all()
     return cars
 
 @router.post("/", response_model=Car)

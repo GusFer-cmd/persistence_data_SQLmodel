@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 from app.core.database import get_session
 from app.models.models import Collection
@@ -19,6 +19,22 @@ def list_collection_items(session: Session = Depends(get_session)):
     """
     items = session.exec(select(Collection)).all()
     return items
+
+@router.get("/paged", response_model=list[Collection])
+def list_collections_items_paged(offset: int = 0, limit: int = Query(default=10, le=100), session: Session = Depends(get_session)):
+    """
+    Docstring para list_collections_paged
+    
+    Args:
+        offset (int): deslocamento inicial
+        limit (int): limite de registros a serem retornados
+        session (Session): sessao do banco
+    
+    Returns:
+        collection (List[Collection]): lista com as colecoes dentro do intervalo fornecido
+    """
+    collection = session.exec(select(Collection).offset(offset).limit(limit)).all()
+    return collection
 
 @router.post("/", response_model=Collection)
 def create_collection_item(item: Collection, session: Session = Depends(get_session)):

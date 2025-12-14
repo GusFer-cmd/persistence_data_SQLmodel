@@ -17,5 +17,5 @@ uv run python -m app.seeds.seed_data
 
 uv run uvicorn main:app --reload
 
-PARA O SUPABASE - caso nao funcionar, é só executar sem o "uv run" (o banco remoto já está povoado, não é preciso usar o python -m app.seeds.seed_data):
+PARA O SUPABASE - caso nao funcionar, é só executar sem o "uv run" e einstalar com o pip (o banco remoto já está povoado, não é preciso usar o python -m app.seeds.seed_data):
     uv pip install psycopg2-binary

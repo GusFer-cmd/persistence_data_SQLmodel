@@ -1,0 +1,11 @@
+Divisão das tarefas:
+
+Gustavo:
+- Modelagem dos models:
+- Implementação de consultas;
+- Gerenciamento das migrations
+
+Marcelo:
+- Documentação dos endpoints;
+- Implementação de consultas;
+- Integração com o Supabase

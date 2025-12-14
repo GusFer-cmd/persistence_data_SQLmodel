@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
-# Import all your models so Alembic sees them
 from app.models.models import (
     Owner,
     Manufacturer,
@@ -20,22 +19,19 @@ from app.models.models import (
 # ---------------------------------------------------------
 # Load .env from the project root (hotwheels_api/.env)
 # ---------------------------------------------------------
-ROOT_DIR = Path(__file__).resolve().parents[1]  # sobe uma pasta acima de /alembic
+ROOT_DIR = Path(__file__).resolve().parents[1]
 env_path = ROOT_DIR / ".env"
 load_dotenv(env_path)
 
 config = context.config
 
-# Override URL from Alembic if DATABASE_URL exists
 database_url = os.getenv("DATABASE_URL")
 if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
 
-# Logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Autogenerate metadata
 target_metadata = SQLModel.metadata
 
 

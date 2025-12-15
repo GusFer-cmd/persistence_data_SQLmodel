@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 from app.core.database import get_session
 from app.models.models import Car, Manufacturer, CarSerieLink, Serie, CarRead
+from sqlalchemy.orm import selectinload
 
 router = APIRouter(prefix="/cars", tags=["Cars"])
 
@@ -73,10 +74,27 @@ def get_car(car_id: int, session: Session = Depends(get_session)):
 
 @router.get("/{car_id}/series", response_model=CarRead)
 def get_car_with_series(car_id: int, session: Session = Depends(get_session)):
-    car = session.exec(
+    """
+    Docstring para get_car_with_series
+
+    Args:
+        car_id (int): id do carro desejado
+        session (Session): sessão do banco de dados
+    
+    Returns:
+        car (Car): carro com suas series associadas
+    """
+
+    statement = (
         select(Car)
         .where(Car.id == car_id)
-    ).first()
+        .options(
+            selectinload(Car.series)
+            .selectinload(CarSerieLink.serie)
+        )
+    )
+
+    car = session.exec(statement).first()
 
     if not car:
         raise HTTPException(status_code=404, detail="Car not found")

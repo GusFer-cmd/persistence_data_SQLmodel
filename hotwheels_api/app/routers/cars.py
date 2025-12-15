@@ -83,7 +83,6 @@ def get_car_with_series(car_id: int, session: Session = Depends(get_session)):
 
     return car
 
-    
 @router.delete("/{car_id}", response_model=Car)
 def delete_car(car_id: int, session: Session = Depends(get_session)):
     """

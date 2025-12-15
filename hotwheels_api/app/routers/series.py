@@ -70,7 +70,6 @@ def list_serie(serie_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Serie not found")
     return serie
 
-
 @router.get("/{serie_id}/cars", response_model=SerieWithCarsRead)
 def get_serie_with_cars(serie_id: int, session: Session = Depends(get_session)):
     serie = session.exec(

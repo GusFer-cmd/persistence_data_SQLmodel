@@ -93,11 +93,13 @@ def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_ses
 def list_manufactures_number(numb: int, session: Session = Depends(get_session)):
     """
     Docstring para list_manufactures_number
-    
-    numb (int): numero minimo de carros
-    session (Session): sessao do banco de dados
 
-    manufactures (List[Manufacturer]): lista com as montadoras com mais que numb carros
+    Args:
+        numb (int): numero minimo de carros
+        session (Session): sessao do banco de dados
+
+    Returns:
+        manufactures (List[Manufacturer]): lista com as montadoras com mais que numb carros
     """
     query = (select(Manufacturer)
                 .join(Car, Car.manufacturer_id == Manufacturer.id)

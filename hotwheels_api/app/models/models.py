@@ -60,3 +60,29 @@ class CollectionCarLink(SQLModel, table=True):
 
     collection: Optional[Collection] = Relationship(back_populates="cars")
     car: Optional[Car] = Relationship(back_populates="collections")
+
+#Schemas para operações com subobjetos
+
+class SerieRead(SQLModel):
+    id: int
+    name: str
+    year: int
+
+class CarSerieLinkRead(SQLModel):
+    number: int
+    max_number: int
+    serie: SerieRead
+
+class CarRead(SQLModel):
+    id: int
+    name: str
+    scale: str
+    color: str
+    manufacturer_id: Optional[int]
+    series: List[CarSerieLinkRead]
+
+class SerieWithCarsRead(SQLModel):
+    id: int
+    name: str
+    year: int
+    cars: List[CarSerieLinkRead]

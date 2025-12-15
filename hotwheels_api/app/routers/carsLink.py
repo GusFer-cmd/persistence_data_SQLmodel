@@ -19,7 +19,7 @@ def list_collection_car_links(session: Session = Depends(get_session)):
     """
     links = session.exec(select(CollectionCarLink)).all()
     return links
-    
+
 @router.post("/", response_model=CollectionCarLink)
 def create_collection_car_link(link: CollectionCarLink, session: Session = Depends(get_session)):
     """

@@ -69,6 +69,30 @@ def list_collection_item(item_id: int, session: Session = Depends(get_session)):
     if not item:
         raise HTTPException(status_code=404, detail="Collection Item not found")
     return item
+
+@router.put("/{item_id}", response_model=Collection)
+def update_collection_item(item_id: int, updated_item: Collection, session: Session = Depends(get_session)):
+    """
+    Docstring para update_collection_item
+    
+    Args:
+        item_id (int): id da colecao a ser atualizada
+        updated_item (Collection): dados atualizados da colecao
+        session (Session): sessao do banco
+
+    Returns:
+        item (Collection): colecao atualizada com o id correspondente
+    """
+    item = session.get(Collection, item_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Collection Item not found")
+    item.name = updated_item.name
+    item.description = updated_item.description
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    
+    return item
     
 @router.delete("/{item_id}", response_model=Collection)
 def delete_collection_item(item_id: int, session: Session = Depends(get_session)):

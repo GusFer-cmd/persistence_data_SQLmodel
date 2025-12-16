@@ -13,7 +13,7 @@ from app.models.models import (
     Serie,
     Collection,
     CollectionCarLink,
-    CarSerieLink,
+    CarSerieLink
 )
 
 # ---------------------------------------------------------

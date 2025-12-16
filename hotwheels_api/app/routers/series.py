@@ -98,6 +98,30 @@ def get_serie_with_cars(serie_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Serie not found")
 
     return serie
+
+@router.put("/{serie_id}", response_model=Serie)
+def update_serie(serie_id: int, updated_serie: Serie, session: Session = Depends(get_session)):
+    """
+    Docstring para update_serie
+    
+    Args:
+        serie_id (int): id da serie a ser atualizada na tabela
+        updated_serie (Serie): objeto serie com os dados atualizados
+        session (Session): sessao do banco
+
+    Returns:
+        serie (Serie): serie atualizada no banco
+    """
+    serie = session.get(Serie, serie_id)
+
+    if not serie:
+        raise HTTPException(status_code=404, detail="Serie not found")
+    serie.name = updated_serie.name
+    serie.year = updated_serie.year
+    session.add(serie)
+    session.commit()
+    session.refresh(serie)
+    return serie
     
 @router.delete("/{serie_id}", response_model=Serie)
 def delete_serie(serie_id: int, session: Session = Depends(get_session)):

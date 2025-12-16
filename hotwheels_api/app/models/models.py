@@ -81,8 +81,24 @@ class CarRead(SQLModel):
     manufacturer_id: Optional[int]
     series: List[CarSerieLinkRead]
 
+class CarSerieLinkFromSerieRead(SQLModel):
+    number: int
+    max_number: int
+    car: CarRead
+
 class SerieWithCarsRead(SQLModel):
     id: int
     name: str
     year: int
-    cars: List[CarSerieLinkRead]
+    cars: List[CarSerieLinkFromSerieRead]    
+
+class CollectionCarLinkRead(SQLModel):
+    added_date: datetime
+    car: CarRead
+
+class CollectionRead(SQLModel):
+    id: int
+    name: str
+    title: str
+    owner_id: Optional[int]
+    cars: List[CollectionCarLinkRead]

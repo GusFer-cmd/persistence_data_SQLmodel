@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.database import create_db_and_tables
-from app.routers import owners, manufacturers, cars, series, collections, carsLink, seriesLink
+from app.routers import owners, manufacturers, cars, series, collections, carsLink, seriesLink, search
 
 app = FastAPI(
     title="HotWheels API",
@@ -18,3 +18,4 @@ app.include_router(cars.router)
 app.include_router(collections.router)
 app.include_router(carsLink.router)
 app.include_router(seriesLink.router)
+app.include_router(search.router)

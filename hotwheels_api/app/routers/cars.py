@@ -101,6 +101,32 @@ def get_car_with_series(car_id: int, session: Session = Depends(get_session)):
 
     return car
 
+@router.put("/{car_id}", response_model=Car)
+def update_car(car_id: int, updated_car: Car, session: Session = Depends(get_session)):
+    """
+    Docstring para update_car
+    
+    Args:
+        car_id (int): id do carro a ser atualizado
+        updated_car (Car): objeto carro com os novos dados
+        session (Session): sessão do banco de dados
+    
+    Returns:
+        car (Car): carro atualizado
+    """
+    car = session.get(Car, car_id)
+
+    if not car:
+        raise HTTPException(status_code=404, detail="Car not found")
+    car.name = updated_car.name
+    car.manufacturer = updated_car.manufacturer
+    car.year = updated_car.year
+    session.add(car)
+    session.commit()
+    session.refresh(car)
+    
+    return car
+
 @router.delete("/{car_id}", response_model=Car)
 def delete_car(car_id: int, session: Session = Depends(get_session)):
     """

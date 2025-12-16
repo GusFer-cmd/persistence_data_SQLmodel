@@ -70,6 +70,30 @@ def get_manufacturer(manufacturer_id: int, session: Session = Depends(get_sessio
         raise HTTPException(status_code=404, detail="Manufacturer not found")
     return manufacturer
     
+@router.put("/{manufacturer_id}", response_model=Manufacturer)
+def update_manufacturer(manufacturer_id: int, updated_manufacturer: Manufacturer, session: Session = Depends(get_session)):
+    """
+    Docstring para update_manufacturer
+    
+    Args:
+        manufacturer_id (int): id do objeto Manufacturer a ser atualizado
+        updated_manufacturer (Manufacturer): objeto Manufacturer com os dados atualizados
+        session (Session): sessao do banco de dados
+
+    Returns:
+        manufacturer (Manufacturer): objeto Manufacturer que foi atualizado no banco
+    """
+    manufacturer = session.get(Manufacturer, manufacturer_id)
+
+    if not manufacturer:
+        raise HTTPException(status_code=404, detail="Manufacturer not found")
+    manufacturer.name = updated_manufacturer.name
+    manufacturer.country = updated_manufacturer.country
+    session.add(manufacturer)
+    session.commit()
+    session.refresh(manufacturer)
+    return manufacturer
+
 @router.delete("/{manufacturer_id}", response_model=Manufacturer)
 def delete_manufacturer(manufacturer_id: int, session: Session = Depends(get_session)):
     """

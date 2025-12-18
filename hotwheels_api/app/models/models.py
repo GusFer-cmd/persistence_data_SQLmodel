@@ -74,12 +74,17 @@ class CarRead(SQLModel):
     scale: str
     color: str
     manufacturer_id: Optional[int]
-    series: List["CarSerieLinkRead"]
+    series: List["CarSerieLinkWithSerieRead"]
 
 class CarSerieLinkRead(SQLModel):
     number: int
     max_number: int
     car: CarRead
+
+class CarSerieLinkWithSerieRead(SQLModel):
+    number: int
+    max_number: int
+    serie: SerieRead
 
 class SerieWithCarsRead(SQLModel):
     id: int
